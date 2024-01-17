@@ -49,15 +49,65 @@ void insertPart(HashTable* hashTable, Part* part) {
 
 // Function to search for a part in the hash table
 Part* searchPart(HashTable* hashTable, int partID) {
-  // Implement the logic to delete a part from the hash table
+  // Implement the hash function to find the index
+  int index = partID % hashTable->size;
+  
+  // Search for the part in the linked list at the computed index
+  Node* current = hashTable->table[index];
+  while (current != NULL) {
+      if (current->part.partID == partID) {
+          return &current->part);
+      }
+      current = current-> next;
+  }
+  
+    // Part not found
+    return NULL;
 }
 
 // Function to delete a part from the hash table
 void deletePart(HashTable* hashTable, int partID) {
-  // Implement the logic to delete a part from the hash table
+  // Implement the hash function to find the index
+  int index = partID % hashTable->size;
+  
+  // Search for the part in the linked list at the computed index
+  Node* current = hashTable->table[index];
+  Node* previous = NULL;
+  
+  // Traverse the linked list to find the node to delete
+  while (current != NULL) {
+      if (current->part.partID == partID) {  
+          // Remove the node from the linked list
+          if (previous == NULL) {
+          // The node to delete is the first node in the list
+          hashTable->table[index] = current->next;
+          } else {
+              // The node to delete is not the first node
+              previous->next = current->next;
+          }
+      // Free the memory allocated for the node
+      free(current);
+      return;
+    }
+    // Move to the next node
+    previous = current;
+    current = current->next;  
+  }
 }
 
 // Function to free the memory allocated for the hash table
 void freeHashTable(HashTable* hashTable){
-    // Implement the logic to free the memory allocation
+    // Free each linked list and its nodes
+    for (int i = 0; i < hashTable->size; ++i) {
+        Node* current = hashTable->table[i];
+        while (current != NULL) {
+            Node* next = current->next;
+            free(current);
+            current=next;
+            }
+        }
+        
+        // Free the array of pointersnand the hash table itself
+        free(hashTable->table);
+        free(hashTable);
 }
