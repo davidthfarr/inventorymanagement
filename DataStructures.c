@@ -1,6 +1,7 @@
 /* Implements the hash table and other necessary data structures for managing inventory efficiently.*/
 
 #include "DataStructures.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 // Function to create a new node
@@ -47,6 +48,26 @@ void insertPart(HashTable* hashTable, Part* part) {
     }
 }
 
+// Function to read data from file and populate the hash table
+void readDataFromFile(HashTable* hashTable, const char* fileName){
+    FILE* file =fopen(fileName, "r");
+    if (file == NULL){
+        fprintf(stderr, "Error opening file: %s\n", fileName);
+        return;
+    }
+
+    Part part;
+    while (fscanf(file, "%d %64s %64s %d %d",
+    &part.partID, part.storeAddress, part.partName, &part.price, &part.quantityOnHand) == 5){
+        
+        //Insert the part into the hash table
+        insertPart(hashTable, &part);
+    }
+
+    fclose(file);
+}
+
+
 // Function to search for a part in the hash table
 Part* searchPart(HashTable* hashTable, int partID) {
   // Implement the hash function to find the index
@@ -56,7 +77,7 @@ Part* searchPart(HashTable* hashTable, int partID) {
   Node* current = hashTable->table[index];
   while (current != NULL) {
       if (current->part.partID == partID) {
-          return &current->part);
+          return &current->part;
       }
       current = current-> next;
   }
@@ -106,6 +127,11 @@ void freeHashTable(HashTable* hashTable){
             current=next;
             }
         }
+        
+        // Free the array of pointersnand the hash table itself
+        free(hashTable->table);
+        free(hashTable);
+}
         
         // Free the array of pointersnand the hash table itself
         free(hashTable->table);
