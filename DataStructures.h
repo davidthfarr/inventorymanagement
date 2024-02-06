@@ -4,6 +4,10 @@
 // Define the structure for a part
 typedef struct Part{
     int partID;
+    char storeAddress[64]; // Max length 64 per requirements
+    char partName[64]; // Max length per requirements
+    int price;
+    int quantityOnHand;
   // Add other fields as needed (description, price, quantity, etc.)
 } Part;
 
@@ -14,14 +18,14 @@ typedef struct Node{
 } Node;
 
 // Define the structure for a hash table
-typedef struct HashTable{
+typedef struct {
   // Hash Table structure details
   int size;
   Node** table; // Array of pointers to Nodes
 } HashTable;
 
 //Function prototypes
-Hashtable* createHashTable(int size);
+HashTable* createHashTable(int size);
 void insertPart(HashTable* hashTable, Part* part);
 Part* searchPart(HashTable* hashTable, int partID);
 void deletePart(HashTable* hashTable, int partID);
