@@ -1,5 +1,6 @@
 /*Entry  point where program execution begins. Handles user input and interacts with other modules. */
-#include "data_structures.h"
+#include "DataStructures.h"
+#include "DataStructures.c"
 #include <stdio.h>
 
 int main(){
